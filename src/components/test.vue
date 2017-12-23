@@ -11,9 +11,10 @@
       MapSearch
         //button add
       .showcards(v-for="(card, index) in cards")
-        Card(@deletecard="deleteacard", :status="card.status", :index="index", :eventName="card.eventName", :startTime="card.startTime", :lastTime="card.lastTime", :location="card.location")
+        Card(@deletecard="deleteacard", :cardflag="card.cardflag", :status="card.eventFlag", :index="index", :eventName="card.eventName", :startTime="card.eventStarttime", :lastTime="card.eventPeriod", :location="card.eventLocation")
     .submit
       el-button.submitlst(type="primary", plain, @click="submit") 魔力涌现
+      el-button.reload(type="primary", plain, @click="reload") reload
 
 </template>
 
@@ -74,55 +75,86 @@
         },
         inputflag: false,
         timeflag: false,
+        userid: '',
         date: '',
         cards:[
-          {
+          /*{
             eventName: '1',
             startTime: 'qwe',
             lastTime: 'eee',
             location: 'www',
-            status: 0
+            status: 0,
+            cardflag: 0
           },
           {
             eventName: '2',
             startTime: 'weqwe',
             lastTime: 'eqwe',
             location: 'qwewq',
-            status: 0
+            status: 0,
+            cardflag: 0
           },
           {
             eventName: '3',
             startTime: 'weqwe',
             lastTime: 'eqwe',
             location: 'qwewq',
-            status: 0
+            status: 0,
+            cardflag: 0
           },
           {
             eventName: '4',
             startTime: 'weqwe',
             lastTime: 'eqwe',
             location: 'qwewq',
-            status: 0
-          },
+            status: 0,
+            cardflag: 0
+          },*/
         ]
       }
     },
     methods: {
-      /*async reload(){
-        await ax.get('url').then(function(res){
-          this.cards = res.data.list;
-        })
-      }*/
+      reload(){
+        let that = this;
+        let ls = window.localStorage;
+        let id = ls.getItem("userid")
+        ax.get('http://192.168.43.164:8000/v1/event/query?userId=' + id,)
+          .then(function (res) {
+            console.log(res);
+            that.cards = res.data
+          })
+          .catch(function (err) {
+            console.log(err);
+          })
+      },
       addCard (cardl){
-        this.cards.push(cardl);
+        //this.cards.push(cardl);
+        this.reload()
       },
       deleteacard(index){
-        this.cards.splice(index, 1);
-        //this.reload();
+        let that = this;
+        let ls = window.localStorage;
+        let id = ls.getItem("userid")
+        console.log(id)
+
+        ax.post('http://192.168.43.164:8000/v1/event/delete', {
+          userId: id,
+          eventId: this.cards[index].eventId
+        })
+          .then(function (res) {
+            console.log(res);
+            that.reload();
+          })
+          .catch(function (err) {
+            console.log(err);
+          })
+
+        //this.cards.splice(index, 1);
       },
 
       submit (){
         console.log("submit");
+        console.log(this.date.getTime());
         /*ax.post('url', {
           date: this.date,
           event: this.cards,
@@ -147,7 +179,7 @@
     flex-direction column
     margin 20px auto
     min-height 600px
-    max-width 500px
+    max-width 800px
     box-shadow 0 20px 50px 3px #666
     align-items center
 
@@ -168,10 +200,16 @@
         margin 15px
 
     .cards
-      max-width 500px
+      max-width 550px
       display flex
       flex-direction column
       .add
+        align-items flex-end
+      .showcards
+        border-top thin solid rgba(0,0,0,.3)
+      .submit
+        width 300px
+        display flex
         align-items flex-end
 
 

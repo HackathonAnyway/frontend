@@ -1,8 +1,8 @@
 <template lang="pug">
 #register
   img(src="static/down.png")
-  el-input.username(placeholder="username")
-  el-input.password(placeholder="password")
+  el-input.username(placeholder="username" v-model="username")
+  el-input.password(placeholder="password" v-model="password")
   el-button.submit(type="primary", @click="commit") register
 
 </template>
@@ -26,18 +26,22 @@
 
     },
     methods: {
-      commit(){
-        /*ax.post('http://192.168.1.131:8000/v1/user/register', {
+      commit() {
+        console.log("post")
+        console.log(this.username +" "+ this.password)
+        ax.post('http://192.168.43.164:8000/v1/user/register', {
           userId: this.username,
           userPassword: this.password
         })
-        .then(function(res){
+          .then(function (res) {
             console.log(res);
           })
-          .catch(function(err){
+          .catch(function (err) {
             console.log(err);
-          })*/
-        this.$router.push('/main')
+          })
+        /*if (res.status) {
+          this.$router.push('/main')
+        }*/
       }
     }
   }

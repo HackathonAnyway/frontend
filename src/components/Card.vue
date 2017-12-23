@@ -9,33 +9,31 @@
     .right(v-if="cardflag")
       .space
       .btn
-        button(v-if="status==0", @click="finishcard") 做完啦
-        button(v-if="status==1", @click="deletecard") delete
+        el-button(size='small' v-if="status==0", @click="finishcard") 做完啦
+        el-button(size='small' type='danger' v-if="status==1", @click="deletecard") 删除
 
 </template>
 <script>
   import $ from "../../static/jquery-3.2.1.min"
   import store from '../store/store'
+  import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
   export default {
+    components:{
+      ElButton
+    },
     data() {
       return {
-        cardflag: false,
         showflag: 0
       }
     },
-    props: ['eventName', 'startTime', 'lastTime', 'location', 'index', 'status'],
+    props: ['eventName', 'startTime', 'lastTime', 'location', 'index', 'status', 'cardflag'],
     created() {
     },
     methods: {
       deletecard(){
 
         //console.log("delete card" + this.index);
-        /*ax.get('url').then(function(res){
-          console.log(res);
-        })
-        .catch(function(err){
-          console.log(err);
-        })*/
+
         this.$emit('deletecard', this.index);
 
 
@@ -54,8 +52,8 @@
     display flex
     flex-direction row
     border solid thin rgba(0, 0, 0, .2)
-    min-width 250px
-    max-width 350px
+    min-width 350px
+    max-width 550px
     margin 5px 0
     .info
       flex 0 0 70%

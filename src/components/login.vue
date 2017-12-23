@@ -1,8 +1,8 @@
 <template lang="pug">
   #login
     img(src="static/down.png")
-    el-input.username(placeholder="username")
-    el-input.password(placeholder="password")
+    el-input.username(placeholder="username" v-model="username")
+    el-input.password(placeholder="password" v-model="password")
     .btn
       el-button.submit(type="primary", @click="commit") login
       el-button.register(type="primary", @click="register") register
@@ -28,13 +28,32 @@
     },
     methods: {
       commit(){
-        /*ax.post('url', {
-          username: this.username,
-          password: this.password
+        var flag = false
+        var that = this;
+        console.log("ell")
+        console.log(this.username +" "+ this.password)
+
+        ax.post('http://192.168.43.164:8000/v1/user/login', {
+          userId: this.username,
+          userPassword: this.password
         })
-          .then(function(res){
-            console.log(res);
-          })*/
+          .then(function (res) {
+            console.log(res.status);
+            if(res.status == 200){
+              console.log("set flag")
+              var ls = window.localStorage;
+              console.log("save" + that.username)
+              ls['userid'] = that.username;
+              that.$router.push('/main')
+              flag = true
+            }
+          })
+          .catch(function (err) {
+            console.log(err);
+          })
+
+
+
       },
       register(){
         this.$router.push('/register')
