@@ -58,6 +58,8 @@ export default {
     min-width 350px
     max-width 550px
     margin 5px 0
+    background-color: #E0F3CA
+    box-shadow 5px 5px 30px 3px #627d84
     .info
       flex 0 0 70%
       display flex
@@ -74,4 +76,6 @@ export default {
       .btn
         display flex
         flex 0 0 30%
+  .done
+    font-size 15px
 </style>

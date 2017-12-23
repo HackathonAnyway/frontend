@@ -1,7 +1,7 @@
 <template lang="pug">
   #map-search
     #r-result
-      input(type="text" id="suggestId" size="20" value="南京航天航空大学" style="width:150px;")
+      input(type="text" id="suggestId" size="20" value="南京航天航空大学" style="width:150px;" placeholder="建议位置")
     #searchResultPanel(style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;")
 
 </template>

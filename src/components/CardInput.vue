@@ -49,7 +49,10 @@ import ElPicker from "../../node_modules/element-ui/packages/date-picker/src/pic
         }
         console.log(cardl)
         let that = this;
+        let ls = window.localStorage;
+        let id = ls.getItem("userid")
         ax.post('http://192.168.43.164:8000/v1/event/add', {
+          userId: id,
           eventName: cardl.eventName,
           location: cardl.location,
           startTime: cardl.startTime.getTime(),//new Date(cardl.startTime).getTime(),
