@@ -1,6 +1,6 @@
 <template lang="pug">
   #card
-    .info
+    .info.el-collapse-transition
       //p.detail {{index}}
       p.event-name.detail(@click="cardflag=!cardflag;") 事件：{{eventName}}
       p.startTime.detail(v-if="cardflag")  开始时间：{{startTime}}
@@ -17,7 +17,9 @@
   import $ from "../../static/jquery-3.2.1.min"
   import store from '../store/store'
   import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
-  export default {
+  import CollapseTransition from "../../node_modules/element-ui/lib/transitions/collapse-transition"
+  import 'element-ui/lib/theme-chalk/base.css'
+export default {
     components:{
       ElButton
     },
@@ -33,7 +35,6 @@
       deletecard(){
 
         //console.log("delete card" + this.index);
-
         this.$emit('deletecard', this.index);
 
 
@@ -41,6 +42,8 @@
       finishcard(){
         //console.log("finish a card");
         this.status = 1;
+        this.$emit('modifycard', this.index, this.status);
+
 
       }
     }

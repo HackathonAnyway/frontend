@@ -48,7 +48,7 @@ import ElPicker from "../../node_modules/element-ui/packages/date-picker/src/pic
           status: this.status
         }
         console.log(cardl)
-
+        let that = this;
         ax.post('http://192.168.43.164:8000/v1/event/add', {
           eventName: cardl.eventName,
           location: cardl.location,
@@ -58,12 +58,11 @@ import ElPicker from "../../node_modules/element-ui/packages/date-picker/src/pic
         })
           .then(function (res) {
             console.log(res);
+            that.$emit('transferInfo', cardl);
           })
           .catch(function (err) {
             console.log(err);
           })
-
-        this.$emit('transferInfo', cardl);
       }
     }
   }

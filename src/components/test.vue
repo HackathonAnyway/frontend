@@ -2,19 +2,22 @@
   #test
     .navigation
       h1 MagicList
-    el-button.time(size="medium", round=true, @click="timeflag=!timeflag;") select time
-    el-date-picker(v-if="timeflag" v-model="date", type="date", placeholder="选择日期", :picker-options="pickerOptions1")
-    .cards
-      el-button(type="primary", plain, @click="inputflag=!inputflag").add 添加日程
-      .input(v-if="inputflag")
-        CardInput(@transferInfo="addCard")
-      MapSearch
-        //button add
-      .showcards(v-for="(card, index) in cards")
-        Card(@deletecard="deleteacard", :cardflag="card.cardflag", :status="card.eventFlag", :index="index", :eventName="card.eventName", :startTime="card.eventStarttime", :lastTime="card.eventPeriod", :location="card.eventLocation")
-    .submit
-      el-button.submitlst(type="primary", plain, @click="submit") 魔力涌现
-      el-button.reload(type="primary", plain, @click="reload") reload
+    .container
+      .left
+        el-button.time(size="medium", round=true, @click="timeflag=!timeflag;") 相关信息
+        userinfo(v-if="timeflag")
+      .right
+        .cards
+          el-button(type="primary", plain, @click="inputflag=!inputflag").add 添加日程
+          .input(v-if="inputflag")
+            CardInput(@transferInfo="addCard")
+          MapSearch
+          //button add
+          .showcards(v-for="(card, index) in cards")
+            Card(@deletecard="deleteacard", @modifycard="modifycard", :cardflag="card.cardflag", :status="card.eventFlag", :index="index", :eventName="card.eventName", :startTime="card.eventStarttime", :lastTime="card.eventPeriod", :location="card.eventLocation")
+        .submit
+          el-button.submitlst(type="primary", plain, @click="submit") 魔力涌现
+          el-button.reload(type="primary", plain, @click="reload") reload
 
 </template>
 
@@ -24,6 +27,7 @@
   import 'vue2-animate/dist/vue2-animate.min.css'
   import MapSearch from "./MapSearch.vue"
   import CardInput from "./CardInput.vue"
+  import userinfo from "./userinfo.vue"
   import Card from "./Card.vue"
   import ax from "axios"
   import ElInput from "../../node_modules/element-ui/packages/input/src/input.vue";
@@ -44,7 +48,8 @@
       CardInput,
       Card,
       ElInput,
-      ElButton
+      ElButton,
+      userinfo
     },
     data(){
       return {
@@ -78,40 +83,12 @@
         userid: '',
         date: '',
         cards:[
-          /*{
-            eventName: '1',
-            startTime: 'qwe',
-            lastTime: 'eee',
-            location: 'www',
-            status: 0,
-            cardflag: 0
-          },
-          {
-            eventName: '2',
-            startTime: 'weqwe',
-            lastTime: 'eqwe',
-            location: 'qwewq',
-            status: 0,
-            cardflag: 0
-          },
-          {
-            eventName: '3',
-            startTime: 'weqwe',
-            lastTime: 'eqwe',
-            location: 'qwewq',
-            status: 0,
-            cardflag: 0
-          },
-          {
-            eventName: '4',
-            startTime: 'weqwe',
-            lastTime: 'eqwe',
-            location: 'qwewq',
-            status: 0,
-            cardflag: 0
-          },*/
+
         ]
       }
+    },
+    created() {
+      this.reload()
     },
     methods: {
       reload(){
@@ -140,6 +117,24 @@
         ax.post('http://192.168.43.164:8000/v1/event/delete', {
           userId: id,
           eventId: this.cards[index].eventId
+        })
+          .then(function (res) {
+            console.log(res);
+            that.reload();
+          })
+          .catch(function (err) {
+            console.log(err);
+          })
+
+        //this.cards.splice(index, 1);
+      },
+
+      modifycard(index, status){
+        let that = this;
+        console.log(status)
+        ax.post('http://192.168.43.164:8000/v1/event/modify', {
+          eventId: this.cards[index].eventId,
+          eventFlag: status
         })
           .then(function (res) {
             console.log(res);
@@ -198,6 +193,16 @@
       time
         width 10px
         margin 15px
+    .container
+    display flex
+    flex-direction row
+
+    .left
+      flex 0 0 30%
+    .right
+      flex 0 0 60%
+
+
 
     .cards
       max-width 550px
