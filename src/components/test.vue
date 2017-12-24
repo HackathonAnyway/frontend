@@ -7,11 +7,12 @@
         .user
           img.icon(src="static/head.png")
           h2.username {{userid}}
-
-        el-button.time(type="primary", round=true, plain, @click="timeflag=!timeflag;") 相关信息
-        el-button(type="primary",  round=true, plain, @click="inputflag=!inputflag").add 添加日程
-        CardInput(v-if="inputflag", @transferInfo="addCard")
-        userinfo(v-if="timeflag")
+        CollapseTransition
+          .test
+            el-button.time(type="primary", round=true, plain, @click="timeflag=!timeflag;") 相关信息
+            el-button(type="primary",  round=true, plain, @click="inputflag=!inputflag").add 添加日程
+            CardInput(v-show="inputflag", @transferInfo="addCard")
+            userinfo(@getnow="checknow" v-show="timeflag")
         MapSearch
       .right
         .cards
@@ -37,6 +38,8 @@
   import ElInput from "../../node_modules/element-ui/packages/input/src/input.vue";
   import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
   import ElPicker from "../../node_modules/element-ui/packages/date-picker/src/picker.vue";
+  import CollapseTransition from "../../node_modules/element-ui/lib/transitions/collapse-transition"
+  import 'element-ui/lib/theme-chalk/base.css'
    /*
   $(document).ready(function(){
     console.log("document is ready");
@@ -53,7 +56,8 @@
       Card,
       ElInput,
       ElButton,
-      userinfo
+      userinfo,
+      CollapseTransition
     },
     data(){
       return {
@@ -86,6 +90,7 @@
         timeflag: false,
         userid: '',
         date: '',
+        culoc: '',
         cards:[
 
         ]
@@ -100,7 +105,7 @@
         let ls = window.localStorage;
         let id = ls.getItem("userid")
         this.userid = id;
-        ax.get('http://192.168.43.164:8000/v1/event/query?userId=' + id,)
+        ax.get('http://172.20.10.3:8000/v1/event/query?userId=' + id,)
           .then(function (res) {
             console.log(res);
             that.cards = res.data
@@ -119,7 +124,7 @@
         let id = ls.getItem("userid")
         console.log(id)
 
-        ax.post('http://192.168.43.164:8000/v1/event/delete', {
+        ax.post('http://172.20.10.3:8000/v1/event/delete', {
           userId: id,
           eventId: this.cards[index].eventId
         })
@@ -139,7 +144,7 @@
         let ls = window.localStorage;
         let id = ls.getItem("userid")
         console.log(status)
-        ax.post('http://192.168.43.164:8000/v1/event/modify', {
+        ax.post('http://172.20.10.3:8000/v1/event/modify', {
           userId: id,
           eventId: this.cards[index].eventId,
           eventFlag: status
@@ -154,10 +159,18 @@
 
         //this.cards.splice(index, 1);
       },
+      checknow(loc){
+        this.culoc = loc;
+      },
+
 
       submit (){
         console.log("submit");
-        console.log(this.date.getTime());
+        if(!this.culoc){
+          alert("请输入现在位置");
+        }
+
+        //console.log(this.date.getTime());
         /*ax.post('url', {
           date: this.date,
           event: this.cards,
@@ -178,7 +191,7 @@
 
 <style lang="stylus">
   #test
-    background-color #e0e1df
+    background-color #f4f5f3
     display flex
     flex-direction column
     margin 20px auto
@@ -209,7 +222,7 @@
       width 800px
       .left
         margin-right 30px
-        background-color: #E0F3CA
+        background-color: #f0e9ec
         box-shadow 5px 5px  3px #627d84
 
 

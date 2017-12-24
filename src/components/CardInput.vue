@@ -17,6 +17,8 @@ import ax from 'axios';
 import ElInput from "../../node_modules/element-ui/packages/input/src/input.vue";
 import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
 import ElPicker from "../../node_modules/element-ui/packages/date-picker/src/picker.vue";
+import CollapseTransition from "../../node_modules/element-ui/lib/transitions/collapse-transition"
+import 'element-ui/lib/theme-chalk/base.css'
 
   export default {
     components: {
@@ -51,7 +53,7 @@ import ElPicker from "../../node_modules/element-ui/packages/date-picker/src/pic
         let that = this;
         let ls = window.localStorage;
         let id = ls.getItem("userid")
-        ax.post('http://192.168.43.164:8000/v1/event/add', {
+        ax.post('http://172.20.10.3:8000/v1/event/add', {
           userId: id,
           eventName: cardl.eventName,
           location: cardl.location,

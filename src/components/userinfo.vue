@@ -1,13 +1,14 @@
 <template lang="pug">
   #userinfo
-    el-input(v-model="currentLocation" placeholder="当前位置")
+    el-input(@change="update" v-model="currentLocation" placeholder="当前位置")
     el-date-picker(v-model="now", type="date", placeholder="选择日期", :picker-options="pickerOptions1")
-    el-button(type="primary", plain) Confirm
+    el-button(type="primary", plain, @click="sendloc") Confirm
 </template>
 <script>
   import ElInput from "../../node_modules/element-ui/packages/input/src/input.vue";
   import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
   import ElPicker from "../../node_modules/element-ui/packages/date-picker/src/picker.vue";
+  import ax from "axios"
 
   export default {
     components:{
@@ -50,7 +51,21 @@
 
     },
     methods: {
+      sendloc(){
+        ax.post('http://172.20.10.3:8000/v1/location/post', {
+          location: this.currentLocation
+        })
+          .then(function (res) {
 
+            console.log(res);
+          })
+          .catch(function (err) {
+            console.log(err);
+          })
+      },
+      update(){
+        this.$emit('getnow', this.currentLocation);
+      }
     }
   }
 

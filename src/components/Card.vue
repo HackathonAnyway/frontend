@@ -1,10 +1,10 @@
 <template lang="pug">
   #card
-    .info.el-collapse-transition
+    .info
       //p.detail {{index}}
       p.event-name.detail(@click="cardflag=!cardflag;") 事件：{{eventName}}
-      p.startTime.detail(v-if="cardflag")  开始时间：{{startTime}}
-      p.lastTime.detail(v-if="cardflag")  持续时间：{{lastTime}}
+      p.startTime.detail(v-if="cardflag")  开始时间：{{new Date(parseInt(startTime)).Format("MM-dd hh:mm")}}
+      p.lastTime.detail(v-if="cardflag")  持续时间：{{new Date(parseInt(lastTime)).Format("hh:mm:s")}}
       p.location.detail(v-if="cardflag")  地点：{{location}}
     .right(v-if="cardflag")
       .space
@@ -32,23 +32,38 @@ export default {
     created() {
     },
     methods: {
-      deletecard(){
+      deletecard() {
 
         //console.log("delete card" + this.index);
         this.$emit('deletecard', this.index);
 
 
       },
-      finishcard(){
+      finishcard() {
         //console.log("finish a card");
         this.status = 1;
         this.$emit('modifycard', this.index, this.status);
 
 
       }
-    }
+    },
   }
 
+  Date.prototype.Format = function (fmt) { //author: tony
+    var o = {
+      "M+": this.getMonth() + 1, //月份
+      "d+": this.getDate(), //日
+      "h+": this.getHours(), //小时
+      "m+": this.getMinutes(), //分
+      "s+": this.getSeconds(), //秒
+      "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+      "S": this.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+      if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+  };
 </script>
 <style lang="stylus" scoped>
   #card
