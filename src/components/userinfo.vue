@@ -2,7 +2,7 @@
   #userinfo
     el-input(@change="update" v-model="currentLocation" placeholder="当前位置")
     el-date-picker(v-model="now", type="date", placeholder="选择日期", :picker-options="pickerOptions1")
-    el-button(type="primary", plain, @click="sendloc") Confirm
+    el-button(type="primary", plain, @click="sendloc") 确认
 </template>
 <script>
   import ElInput from "../../node_modules/element-ui/packages/input/src/input.vue";

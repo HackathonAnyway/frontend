@@ -11,9 +11,12 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
+    "child_process": "^1.0.2",
     "element-ui": "^2.0.8",
     "github-markdown-css": "^2.9.0",
+    "jpickle": "^0.4.1",
     "marked": "^0.3.6",
+    "pickle": "^0.2.0",
     "pug": "^2.0.0-rc.4",
     "pug-cli": "^1.0.0-alpha6",
     "stylus": "^0.54.5",

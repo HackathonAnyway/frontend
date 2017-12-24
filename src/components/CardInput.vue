@@ -4,11 +4,13 @@
       el-input.event.in(v-model="eventName" placeholder="事件名称")
       //el-input.start-time.in(v-model="startTime" placeholder="开始时间")
       el-date-picker(v-model="startTime", type="datetime", placeholder="选择开始时间")
-      el-time-picker(v-model="lastTime", placeholder="选择持续时间")
+
+      el-time-select(v-model="lastTime",   :picker-options="{start: '0:00',step: '00:15',end: '3:00'}", placeholder="选择持续时间")
+      //p {{lastTime}}
       //el-input.last-time.in(v-model="lastTime" placeholder="持续时间")
       el-input.loc.in(v-model="location" placeholder="地点")
     .btn
-      el-button(type="primary", plain, @click="addcard") add
+      el-button(type="primary", plain, @click="addcard") 添加
 
 </template>
 <script>
@@ -42,6 +44,18 @@ import 'element-ui/lib/theme-chalk/base.css'
     },
     methods: {
       addcard : function(){
+        if(!this.lastTime){
+          alert("请填写持续时间");
+          return;
+        }
+        if(!this.eventName){
+          alert("请填写事件名称");
+          return;
+        }
+        if(!this.location){
+          alert("请填写地点");
+          return;
+        }
         var cardl = {
           eventName: this.eventName,
           startTime: this.startTime,
@@ -57,8 +71,8 @@ import 'element-ui/lib/theme-chalk/base.css'
           userId: id,
           eventName: cardl.eventName,
           location: cardl.location,
-          startTime: cardl.startTime.getTime(),//new Date(cardl.startTime).getTime(),
-          period: cardl.lastTime.getTime(), //Date(cardl.lastTime).getTime(),
+          startTime: !cardl.startTime ? 0 : cardl.startTime.getTime(),//new Date(cardl.startTime).getTime(),
+          period: cardl.lastTime, //Date(cardl.lastTime).getTime(),
           flag: cardl.status
         })
           .then(function (res) {
@@ -76,13 +90,12 @@ import 'element-ui/lib/theme-chalk/base.css'
 </script>
 <style lang="stylus" scoped>
   #card-input
-    border thin black solid
     .info
       display flex
       flex-direction column
     .btn
       display flex
-      justify-content flex-end
+      flex-direction column
 
 
 </style>

@@ -4,7 +4,7 @@
       //p.detail {{index}}
       p.event-name.detail(@click="cardflag=!cardflag;") 事件：{{eventName}}
       p.startTime.detail(v-if="cardflag")  开始时间：{{new Date(parseInt(startTime)).Format("MM-dd hh:mm")}}
-      p.lastTime.detail(v-if="cardflag")  持续时间：{{new Date(parseInt(lastTime)).Format("hh:mm:s")}}
+      p.lastTime.detail(v-if="cardflag")  持续时间：{{lastTime}}
       p.location.detail(v-if="cardflag")  地点：{{location}}
     .right(v-if="cardflag")
       .space
@@ -19,13 +19,16 @@
   import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
   import CollapseTransition from "../../node_modules/element-ui/lib/transitions/collapse-transition"
   import 'element-ui/lib/theme-chalk/base.css'
+
+
 export default {
     components:{
       ElButton
     },
     data() {
       return {
-        showflag: 0
+        showflag: 0,
+        cun: 1476000000000
       }
     },
     props: ['eventName', 'startTime', 'lastTime', 'location', 'index', 'status', 'cardflag'],
@@ -48,7 +51,8 @@ export default {
       }
     },
   }
-
+  var now = new Date('2017-12-14T00:00');
+  var cunn = now.getTime();
   Date.prototype.Format = function (fmt) { //author: tony
     var o = {
       "M+": this.getMonth() + 1, //月份
@@ -69,12 +73,12 @@ export default {
   #card
     display flex
     flex-direction row
-    border solid thin rgba(0, 0, 0, .2)
+    //border solid thin rgba(0, 0, 0, .2)
     min-width 350px
     max-width 550px
     margin 5px 0
-    background-color: #E0F3CA
-    box-shadow 5px 5px 30px 3px #627d84
+    background-color rgba(255, 255, 255 .7)
+    //box-shadow 5px 5px 30px 3px #627d84
     .info
       flex 0 0 70%
       display flex

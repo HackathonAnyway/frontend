@@ -1,7 +1,7 @@
 <template lang="pug">
   #test
     .navigation
-      h1(style="color:black;") MagicList
+      h1(style="font-size:40px;color:rgba(0,112,119,1);font-family:'Arial Black', Gadget, sans-serif;") Magic List
     .container
       .left
         .user
@@ -9,20 +9,20 @@
           h2.username {{userid}}
         CollapseTransition
           .test
-            el-button.time(type="primary", round=true, plain, @click="timeflag=!timeflag;") 相关信息
-            el-button(type="primary",  round=true, plain, @click="inputflag=!inputflag").add 添加日程
+            el-button.time(type="primary", plain, round=true, @click="timeflag=!timeflag;") 相关信息
+            el-button(type="primary", plain, round=true,  @click="inputflag=!inputflag").add 添加日程
             CardInput(v-show="inputflag", @transferInfo="addCard")
-            userinfo(@getnow="checknow" v-show="timeflag")
+            userinfo(@getnow="checknow", v-show="timeflag")
         MapSearch
       .right
         .cards
-          h3.subtitle Events here
+          h2(style="font-size:30px;color:rgba(0,112,119,1);font-family:'Arial Black', Gadget, sans-serif;").subtitle Cards
           //button add
           .showcards(v-for="(card, index) in cards")
             Card(@deletecard="deleteacard", @modifycard="modifycard", :cardflag="card.cardflag", :status="card.eventFlag", :index="index", :eventName="card.eventName", :startTime="card.eventStarttime", :lastTime="card.eventPeriod", :location="card.eventLocation")
         .submit
-          el-button.submitlst(type="primary", plain, @click="submit") 魔力涌现
-          el-button.reload(type="primary", plain, @click="reload") reload
+          el-button.submitlst(type="primary", plain,  @click="submit") 魔力涌现
+          //el-button.reload(type="primary", plain, @click="reload") reload
 
 </template>
 
@@ -40,6 +40,11 @@
   import ElPicker from "../../node_modules/element-ui/packages/date-picker/src/picker.vue";
   import CollapseTransition from "../../node_modules/element-ui/lib/transitions/collapse-transition"
   import 'element-ui/lib/theme-chalk/base.css'
+  //import pickle from "pickle"
+  var jpickle = require('jpickle')
+
+  //var pickle = require('./lib/pickle');
+
    /*
   $(document).ready(function(){
     console.log("document is ready");
@@ -151,6 +156,7 @@
         })
           .then(function (res) {
             console.log(res);
+            //that.cards = res.cards;
             that.reload();
           })
           .catch(function (err) {
@@ -169,6 +175,22 @@
         if(!this.culoc){
           alert("请输入现在位置");
         }
+        let ls = window.localStorage;
+        let id = ls.getItem("userid")
+        console.log(id);
+        ax.post('http://172.20.10.3:8000/v1/event/arrange', {
+          userId: id,
+          //eventId: this.cards[index].eventId,
+          //eventFlag: status
+        })
+        .then(function (res) {
+          console.log(res);
+          console.log(jpickle.loads(res.data))
+          //that.reload();
+        })
+        .catch(function (err) {
+          console.log(err);
+        })
 
         //console.log(this.date.getTime());
         /*ax.post('url', {
@@ -191,7 +213,7 @@
 
 <style lang="stylus">
   #test
-    background-color #f4f5f3
+    background-color rgba(230, 251, 253, .5)
     display flex
     flex-direction column
     margin 20px auto
@@ -199,6 +221,7 @@
     max-width 800px
     box-shadow 0 20px 50px 3px #666
     align-items center
+    //background-image url(../../static/back22.jpg)
 
     .navigation
       display flex
@@ -222,8 +245,10 @@
       width 800px
       .left
         margin-right 30px
-        background-color: #f0e9ec
-        box-shadow 5px 5px  3px #627d84
+        background-color rgba(255, 255, 255 .5)
+        //box-shadow 5px 5px 15px 3px #627d84
+        height 450px
+        padding 15px
 
 
     .cards
@@ -234,10 +259,9 @@
         align-items flex-end
       .showcards
         border-top thin solid rgba(0,0,0,.3)
-      .submit
-        width 300px
-        display flex
-        align-items flex-end
+    .submit
+      display flex
+      flex-direction column
 
 
     .detail
@@ -246,7 +270,4 @@
       flex-direction column
       justify-content center
         //border solid thin black
-    .submitlist
-      height 30px
-
 </style>
