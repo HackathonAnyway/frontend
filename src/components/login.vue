@@ -1,8 +1,9 @@
 <template lang="pug">
   #login
     img(src="static/down.png")
-    el-input.username(placeholder="username" v-model="username")
-    el-input.password(placeholder="password" v-model="password")
+    .input
+      el-input.username(placeholder="username" v-model="username")
+      el-input.password(placeholder="password" v-model="password")
     .btn
       el-button.submit(type="primary", @click="commit") login
       el-button.register(type="primary", @click="register") register
@@ -33,7 +34,7 @@
         console.log("ell")
         console.log(this.username +" "+ this.password)
 
-        ax.post('http://192.168.43.164:8000/v1/user/login', {
+        ax.post('http://172.20.10.3:8000/v1/user/login', {
           userId: this.username,
           userPassword: this.password
         })
@@ -46,6 +47,9 @@
               ls['userid'] = that.username;
               that.$router.push('/main')
               flag = true
+            }
+            else{
+              alert("please input right info or register");
             }
           })
           .catch(function (err) {
@@ -76,4 +80,6 @@
       margin-bottom 60px
       width 80px
       height 80px
+    .input
+      width 200px
 </style>
